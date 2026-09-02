@@ -1,0 +1,17 @@
+{
+  "short_name": "Quantum",
+  "name": "Quantum - AGU 12.7mm M2",
+  "icons": [
+    {
+      "src": "logo.png?v=5.0",
+      "type": "image/png",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./index.html?v=5.0",
+  "background_color": "#050507",
+  "theme_color": "#050507",
+  "display": "standalone",
+  "orientation": "portrait"
+}
