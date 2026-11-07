@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5f7">
+  <meta name="description" content="Geçici bakım bilgilendirme ekranı">
+  <title>Geçici Sistem Bakımı</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 28px 18px;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { width: min(100%, 660px); text-align: center; }
+    .icon {
+      width: 76px; height: 76px; margin: 0 auto 27px;
+      display: grid; place-items: center; border-radius: 24px;
+      color: #333336; background: linear-gradient(145deg, #fff, #e7e7eb);
+      box-shadow: 0 8px 26px rgba(0,0,0,.055), inset 0 1px 0 rgba(255,255,255,.9);
+    }
+    .icon svg { width: 34px; height: 34px; }
+    .status {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-bottom: 22px; padding: 9px 14px; border-radius: 999px;
+      background: #e8e8ec; color: #55555b;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #77777e; }
+    h1 { margin: 0 0 17px; font-size: clamp(32px, 6vw, 46px); line-height: 1.12; letter-spacing: -1.8px; font-weight: 750; }
+    .description { max-width: 480px; margin: 0 auto; color: #77777e; font-size: 15px; line-height: 1.8; }
+    .timer-card {
+      margin-top: 38px; padding: 31px 20px 24px; border-radius: 28px;
+      background: #e9e9ed; border: 1px solid #eeeeF1;
+      box-shadow: 0 12px 35px rgba(0,0,0,.045), inset 0 1px 0 rgba(255,255,255,.9);
+    }
+    .timer-title { margin-bottom: 23px; color: #77777e; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; }
+    .timer { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+    .time-box {
+      min-width: 0; padding: 17px 4px 14px; border-radius: 17px;
+      background: rgba(255,255,255,.78); border: 1px solid rgba(255,255,255,.95);
+      box-shadow: 0 3px 12px rgba(0,0,0,.025);
+    }
+    .number { display: block; color: #1d1d1f; font-size: clamp(29px, 6vw, 43px); line-height: 1.1; font-weight: 650; letter-spacing: -1.8px; font-variant-numeric: tabular-nums; }
+    .unit { display: block; margin-top: 8px; color: #85858b; font-size: 10px; font-weight: 700; letter-spacing: .8px; }
+    .divider { height: 1px; margin: 25px 0 17px; background: #d5d5da; }
+    .timer-message { color: #77777e; font-size: 12px; line-height: 1.6; }
+    .footer { margin-top: 27px; color: #a1a1a6; font-size: 11px; }
+    @media (max-width: 390px) {
+      body { padding: 22px 13px; }
+      .timer-card { padding: 25px 10px 21px; }
+      .timer { gap: 5px; }
+      .time-box { padding: 15px 2px 12px; border-radius: 14px; }
+      .number { font-size: clamp(26px, 8vw, 32px); letter-spacing: -1.2px; }
+      .unit { font-size: 9px; letter-spacing: .4px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <div class="icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>
+      </svg>
+    </div>
+    <div class="status"><span class="dot"></span>GEÇİCİ SİSTEM BAKIMI</div>
+    <h1>Kısa Bir Mola<br>Veriyoruz.</h1>
+    <p class="description">
+      Sistemimizde meydana gelen bazı yazılımsal sorunlar nedeniyle hizmetlerimize geçici olarak ara verilmiştir. Gerekli teknik düzenlemeler devam etmektedir.
+      <br><br>Anlayışınız için teşekkür ederiz.
+    </p>
+    <section class="timer-card" aria-label="Tahmini yeniden açılış geri sayımı">
+      <div class="timer-title">TAHMİNİ YENİDEN AÇILIŞ</div>
+      <div class="timer">
+        <div class="time-box"><span class="number" id="days">14</span><span class="unit">GÜN</span></div>
+        <div class="time-box"><span class="number" id="hours">00</span><span class="unit">SAAT</span></div>
+        <div class="time-box"><span class="number" id="minutes">00</span><span class="unit">DAKİKA</span></div>
+        <div class="time-box"><span class="number" id="seconds">00</span><span class="unit">SANİYE</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="timer-message" id="message" aria-live="polite">Teknik iyileştirme süreci devam ediyor.</div>
+    </section>
+    <div class="footer">Geçici bakım bilgilendirmesi</div>
+  </main>
+  <script>
+    // Sabit bitiş zamanı: 21 Kasım 2026, 11:11 (Türkiye saati, UTC+3).
+    // Tüm ziyaretçiler aynı bitiş zamanını görür; tarayıcı depolaması gerekmez.
+    const DEADLINE = Date.parse('2026-11-21T11:11:00+03:00');
+    const fields = {
+      days: document.getElementById('days'),
+      hours: document.getElementById('hours'),
+      minutes: document.getElementById('minutes'),
+      seconds: document.getElementById('seconds'),
+      message: document.getElementById('message')
+    };
+    function updateTimer() {
+      let remaining = Math.max(0, DEADLINE - Date.now());
+      const days = Math.floor(remaining / 86400000);
+      remaining %= 86400000;
+      const hours = Math.floor(remaining / 3600000);
+      remaining %= 3600000;
+      const minutes = Math.floor(remaining / 60000);
+      const seconds = Math.floor((remaining % 60000) / 1000);
+      fields.days.textContent = String(days).padStart(2, '0');
+      fields.hours.textContent = String(hours).padStart(2, '0');
+      fields.minutes.textContent = String(minutes).padStart(2, '0');
+      fields.seconds.textContent = String(seconds).padStart(2, '0');
+      if (Date.now() >= DEADLINE) {
+        fields.message.textContent = 'Geri sayım tamamlandı.';
+      }
+    }
+    updateTimer();
+    window.setInterval(updateTimer, 1000);
+  </script>
+</body>
+</html>
