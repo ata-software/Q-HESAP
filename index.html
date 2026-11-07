@@ -1,126 +1,677 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f5f7">
-  <meta name="description" content="Geçici bakım bilgilendirme ekranı">
-  <title>Geçici Sistem Bakımı</title>
-  <style>
-    :root { color-scheme: light; }
-    * { box-sizing: border-box; }
-    html, body { min-height: 100%; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      min-height: 100svh;
-      display: grid;
-      place-items: center;
-      padding: 28px 18px;
-      background: #f5f5f7;
-      color: #1d1d1f;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8b0035">
+<title>Sistem Geçici Olarak Kapalı</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 18px;
+    overflow-x: hidden;
+    color: #292929;
+
+    background: linear-gradient(
+        125deg,
+        #8b0035,
+        #a83200,
+        #9b7600,
+        #006b38,
+        #00528f,
+        #32106b,
+        #790080,
+        #8b0035
+    );
+
+    background-size: 600% 600%;
+    animation: rainbow 12s ease-in-out infinite;
+}
+
+@keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 50% 100%; }
+    50% { background-position: 100% 50%; }
+    75% { background-position: 50% 0%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ANA YERLEŞİM */
+
+.container {
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* SAAT */
+
+.clock-icon {
+    width: 88px;
+    height: 88px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #eeeeF1, #d9d9de);
+    box-shadow:
+        8px 8px 18px rgba(0,0,0,.09),
+        -6px -6px 16px rgba(255,255,255,.9),
+        inset 1px 1px 3px rgba(255,255,255,.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clock-face {
+    width: 66px;
+    height: 66px;
+    border: 2px solid #a8a8ae;
+    border-radius: 50%;
+    position: relative;
+    background: #e7e7eb;
+}
+
+.clock-center {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #77777e;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+
+.clock-hand {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    transform-origin: bottom center;
+    border-radius: 5px;
+}
+
+.hour-hand {
+    width: 3px;
+    height: 17px;
+    background: #77777e;
+    animation: hourMove 24s linear infinite;
+}
+
+.minute-hand {
+    width: 2px;
+    height: 24px;
+    background: #9999a0;
+    animation: minuteMove 8s linear infinite;
+}
+
+@keyframes hourMove {
+    to { transform: translateX(-50%) rotate(360deg); }
+}
+
+@keyframes minuteMove {
+    to { transform: translateX(-50%) rotate(360deg); }
+}
+
+/* DİL VE METİNLER */
+
+.flag {
+    font-size: 27px;
+    height: 34px;
+    line-height: 34px;
+    flex-shrink: 0;
+}
+
+.title-area {
+    width: 100%;
+    height: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+h1 {
+    width: 100%;
+    font-size: 34px;
+    font-weight: 650;
+    letter-spacing: -1.2px;
+    line-height: 1.2;
+    color: #292929;
+    overflow-wrap: anywhere;
+}
+
+.description-area {
+    width: 100%;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.description {
+    width: 100%;
+    max-width: 350px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #ffffff;
+    overflow-wrap: anywhere;
+}
+
+/* GERİ SAYIM */
+
+.countdown {
+    width: 100%;
+    direction: ltr;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.time-box {
+    min-width: 0;
+    height: 82px;
+    padding: 12px 2px 10px;
+    background: rgba(255,255,255,.78);
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 15px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.045);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.number {
+    display: block;
+    font-size: clamp(17px, 4.5vw, 27px);
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+    color: #34343a;
+    white-space: nowrap;
+}
+
+.number.animate {
+    animation: numberChange .35s ease;
+}
+
+@keyframes numberChange {
+    0% {
+        opacity: .25;
+        transform: translateY(7px);
+        filter: blur(3px);
     }
-    .container { width: min(100%, 660px); text-align: center; }
-    .icon {
-      width: 76px; height: 76px; margin: 0 auto 27px;
-      display: grid; place-items: center; border-radius: 24px;
-      color: #333336; background: linear-gradient(145deg, #fff, #e7e7eb);
-      box-shadow: 0 8px 26px rgba(0,0,0,.055), inset 0 1px 0 rgba(255,255,255,.9);
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
     }
-    .icon svg { width: 34px; height: 34px; }
-    .status {
-      display: inline-flex; align-items: center; gap: 8px;
-      margin-bottom: 22px; padding: 9px 14px; border-radius: 999px;
-      background: #e8e8ec; color: #55555b;
-      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+}
+
+.unit {
+    display: block;
+    font-size: clamp(8px, 2vw, 10px);
+    font-weight: 600;
+    letter-spacing: .3px;
+    color: #ffffff;
+    margin-top: 7px;
+    white-space: nowrap;
+}
+
+/* DURUM */
+
+.status {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: #ffffff;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    background: #ffffff;
+    border-radius: 50%;
+    animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%,100% { opacity: .4; }
+    50% { opacity: 1; }
+}
+
+/* ALT BİLGİ */
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 2px;
+    width: 100%;
+    flex-shrink: 0;
+    direction: ltr;
+}
+
+.footer-main {
+    color: #ffffff;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.footer-description {
+    color: #ffffff;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* MARKA YAZILARI */
+
+.brand-highlight {
+    color: #d62828;
+    font-weight: 900;
+}
+
+/* KÜÇÜK EKRAN */
+
+@media (max-height: 680px) {
+    .container {
+        gap: 12px;
     }
-    .dot { width: 7px; height: 7px; border-radius: 50%; background: #77777e; }
-    h1 { margin: 0 0 17px; font-size: clamp(32px, 6vw, 46px); line-height: 1.12; letter-spacing: -1.8px; font-weight: 750; }
-    .description { max-width: 480px; margin: 0 auto; color: #77777e; font-size: 15px; line-height: 1.8; }
-    .timer-card {
-      margin-top: 38px; padding: 31px 20px 24px; border-radius: 28px;
-      background: #e9e9ed; border: 1px solid #eeeeF1;
-      box-shadow: 0 12px 35px rgba(0,0,0,.045), inset 0 1px 0 rgba(255,255,255,.9);
+
+    .clock-icon {
+        width: 70px;
+        height: 70px;
     }
-    .timer-title { margin-bottom: 23px; color: #77777e; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; }
-    .timer { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+
+    .clock-face {
+        width: 54px;
+        height: 54px;
+    }
+
+    .hour-hand { height: 14px; }
+    .minute-hand { height: 19px; }
+
+    .title-area {
+        height: 78px;
+    }
+
+    .description-area {
+        height: 70px;
+    }
+
     .time-box {
-      min-width: 0; padding: 17px 4px 14px; border-radius: 17px;
-      background: rgba(255,255,255,.78); border: 1px solid rgba(255,255,255,.95);
-      box-shadow: 0 3px 12px rgba(0,0,0,.025);
+        height: 74px;
     }
-    .number { display: block; color: #1d1d1f; font-size: clamp(29px, 6vw, 43px); line-height: 1.1; font-weight: 650; letter-spacing: -1.8px; font-variant-numeric: tabular-nums; }
-    .unit { display: block; margin-top: 8px; color: #85858b; font-size: 10px; font-weight: 700; letter-spacing: .8px; }
-    .divider { height: 1px; margin: 25px 0 17px; background: #d5d5da; }
-    .timer-message { color: #77777e; font-size: 12px; line-height: 1.6; }
-    .footer { margin-top: 27px; color: #a1a1a6; font-size: 11px; }
-    @media (max-width: 390px) {
-      body { padding: 22px 13px; }
-      .timer-card { padding: 25px 10px 21px; }
-      .timer { gap: 5px; }
-      .time-box { padding: 15px 2px 12px; border-radius: 14px; }
-      .number { font-size: clamp(26px, 8vw, 32px); letter-spacing: -1.2px; }
-      .unit { font-size: 9px; letter-spacing: .4px; }
-    }
-  </style>
+}
+</style>
 </head>
+
 <body>
-  <main class="container">
-    <div class="icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>
-      </svg>
+
+<main class="container">
+
+    <div class="clock-icon">
+        <div class="clock-face">
+            <div class="clock-hand hour-hand"></div>
+            <div class="clock-hand minute-hand"></div>
+            <div class="clock-center"></div>
+        </div>
     </div>
-    <div class="status"><span class="dot"></span>GEÇİCİ SİSTEM BAKIMI</div>
-    <h1>Kısa Bir Mola<br>Veriyoruz.</h1>
-    <p class="description">
-      Sistemimizde meydana gelen bazı yazılımsal sorunlar nedeniyle hizmetlerimize geçici olarak ara verilmiştir. Gerekli teknik düzenlemeler devam etmektedir.
-      <br><br>Anlayışınız için teşekkür ederiz.
-    </p>
-    <section class="timer-card" aria-label="Tahmini yeniden açılış geri sayımı">
-      <div class="timer-title">TAHMİNİ YENİDEN AÇILIŞ</div>
-      <div class="timer">
-        <div class="time-box"><span class="number" id="days">14</span><span class="unit">GÜN</span></div>
-        <div class="time-box"><span class="number" id="hours">00</span><span class="unit">SAAT</span></div>
-        <div class="time-box"><span class="number" id="minutes">00</span><span class="unit">DAKİKA</span></div>
-        <div class="time-box"><span class="number" id="seconds">00</span><span class="unit">SANİYE</span></div>
-      </div>
-      <div class="divider"></div>
-      <div class="timer-message" id="message" aria-live="polite">Teknik iyileştirme süreci devam ediyor.</div>
-    </section>
-    <div class="footer">Geçici bakım bilgilendirmesi</div>
-  </main>
-  <script>
-    // Sabit bitiş zamanı: 21 Kasım 2026, 11:11 (Türkiye saati, UTC+3).
-    // Tüm ziyaretçiler aynı bitiş zamanını görür; tarayıcı depolaması gerekmez.
-    const DEADLINE = Date.parse('2026-11-21T11:11:00+03:00');
-    const fields = {
-      days: document.getElementById('days'),
-      hours: document.getElementById('hours'),
-      minutes: document.getElementById('minutes'),
-      seconds: document.getElementById('seconds'),
-      message: document.getElementById('message')
-    };
-    function updateTimer() {
-      let remaining = Math.max(0, DEADLINE - Date.now());
-      const days = Math.floor(remaining / 86400000);
-      remaining %= 86400000;
-      const hours = Math.floor(remaining / 3600000);
-      remaining %= 3600000;
-      const minutes = Math.floor(remaining / 60000);
-      const seconds = Math.floor((remaining % 60000) / 1000);
-      fields.days.textContent = String(days).padStart(2, '0');
-      fields.hours.textContent = String(hours).padStart(2, '0');
-      fields.minutes.textContent = String(minutes).padStart(2, '0');
-      fields.seconds.textContent = String(seconds).padStart(2, '0');
-      if (Date.now() >= DEADLINE) {
-        fields.message.textContent = 'Geri sayım tamamlandı.';
-      }
+
+    <div class="flag" id="flag">🇹🇷</div>
+
+    <div class="title-area">
+        <h1 id="heading">Sistem Geçici Olarak Kapalı</h1>
+    </div>
+
+    <div class="description-area">
+        <p class="description" id="description">
+            Sistem, yazılımsal bir sorun nedeniyle geçici olarak hizmet dışıdır.
+        </p>
+    </div>
+
+    <div class="countdown">
+        <div class="time-box">
+            <span class="number" id="days">13</span>
+            <span class="unit" id="dayUnit">GÜN</span>
+        </div>
+
+        <div class="time-box">
+            <span class="number" id="hours">00</span>
+            <span class="unit" id="hourUnit">SAAT</span>
+        </div>
+
+        <div class="time-box">
+            <span class="number" id="minutes">00</span>
+            <span class="unit" id="minuteUnit">DAKİKA</span>
+        </div>
+
+        <div class="time-box">
+            <span class="number" id="seconds">00</span>
+            <span class="unit" id="secondUnit">SANİYE</span>
+        </div>
+
+        <div class="time-box">
+            <span class="number" id="milliseconds">00</span>
+            <span class="unit" id="millisecondUnit">SALİSE</span>
+        </div>
+    </div>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        <span id="statusText">Sistem bakımda</span>
+    </div>
+
+    <footer class="footer">
+
+        <div class="footer-main">
+            <span class="brand-highlight">ATA</span> Software -
+            Admin <span class="brand-highlight">WyS</span> -
+            Sistem Güncelleme
+        </div>
+
+        <div class="footer-description">
+            Bu sistem <span class="brand-highlight">WyS</span> tarafından onarılmaktadır.
+            <span class="brand-highlight">ATA</span>
+            <span class="brand-highlight">&</span>
+            <span class="brand-highlight">WyS</span> Software
+        </div>
+
+    </footer>
+
+</main>
+
+<script>
+
+/* TÜM DİLLER */
+
+const languages = [
+
+{
+lang:"tr",
+flag:"🇹🇷",
+title:"Sistem Geçici Olarak Kapalı",
+description:"Sistem, yazılımsal bir sorun nedeniyle geçici olarak hizmet dışıdır. Sorunun giderilmesi için çalışmalar devam etmektedir.",
+status:"Sistem bakımda",
+units:["GÜN","SAAT","DAKİKA","SANİYE","SALİSE"]
+},
+
+{
+lang:"en",
+flag:"🇬🇧",
+title:"System Temporarily Unavailable",
+description:"The system is temporarily unavailable due to a software issue. Work is underway to resolve the problem.",
+status:"System maintenance",
+units:["DAYS","HOURS","MINUTES","SECONDS","CENTISECONDS"]
+},
+
+{
+lang:"ar",
+flag:"🇸🇦",
+title:"النظام مغلق مؤقتًا",
+description:"النظام غير متاح مؤقتًا بسبب مشكلة برمجية. العمل جارٍ لحل المشكلة.",
+status:"النظام قيد الصيانة",
+units:["يوم","ساعة","دقيقة","ثانية","جزء من الثانية"]
+},
+
+{
+lang:"zh",
+flag:"🇨🇳",
+title:"系统暂时关闭",
+description:"由于软件问题，系统暂时无法使用。目前正在进行修复工作。",
+status:"系统维护中",
+units:["天","小时","分钟","秒","百分之一秒"]
+},
+
+{
+lang:"ja",
+flag:"🇯🇵",
+title:"システム一時停止中",
+description:"ソフトウェアの問題により、システムを一時的に停止しています。現在、問題の解決に取り組んでいます。",
+status:"システムメンテナンス中",
+units:["日","時間","分","秒","百分の一秒"]
+},
+
+{
+lang:"ko",
+flag:"🇰🇷",
+title:"시스템 임시 중단",
+description:"소프트웨어 문제로 인해 시스템을 일시적으로 사용할 수 없습니다. 현재 문제를 해결하고 있습니다.",
+status:"시스템 유지보수 중",
+units:["일","시간","분","초","100분의 1초"]
+},
+
+{
+lang:"fr",
+flag:"🇫🇷",
+title:"Système temporairement indisponible",
+description:"Le système est temporairement indisponible en raison d'un problème logiciel. Nous travaillons à résoudre le problème.",
+status:"Maintenance du système",
+units:["JOURS","HEURES","MINUTES","SECONDES","CENTIÈMES"]
+},
+
+{
+lang:"es",
+flag:"🇪🇸",
+title:"Sistema temporalmente cerrado",
+description:"El sistema no está disponible temporalmente debido a un problema de software. Estamos trabajando para solucionarlo.",
+status:"Mantenimiento del sistema",
+units:["DÍAS","HORAS","MINUTOS","SEGUNDOS","CENTÉSIMAS"]
+},
+
+{
+lang:"de",
+flag:"🇩🇪",
+title:"System vorübergehend geschlossen",
+description:"Das System ist aufgrund eines Softwareproblems vorübergehend nicht verfügbar. Wir arbeiten an einer Lösung.",
+status:"Systemwartung",
+units:["TAGE","STUNDEN","MINUTEN","SEKUNDEN","HUNDERTSTEL"]
+},
+
+{
+lang:"it",
+flag:"🇮🇹",
+title:"Sistema temporaneamente non disponibile",
+description:"Il sistema è temporaneamente non disponibile a causa di un problema software. Stiamo lavorando per risolverlo.",
+status:"Manutenzione del sistema",
+units:["GIORNI","ORE","MINUTI","SECONDI","CENTESIMI"]
+},
+
+{
+lang:"ru",
+flag:"🇷🇺",
+title:"Система временно недоступна",
+description:"Система временно недоступна из-за программной ошибки. В настоящее время ведутся работы по её устранению.",
+status:"Техническое обслуживание",
+units:["ДНИ","ЧАСЫ","МИНУТЫ","СЕКУНДЫ","СОТЫЕ"]
+},
+
+{
+lang:"pt",
+flag:"🇵🇹",
+title:"Sistema temporariamente indisponível",
+description:"O sistema está temporariamente indisponível devido a um problema de software. Estamos trabalhando para resolver o problema.",
+status:"Manutenção do sistema",
+units:["DIAS","HORAS","MINUTOS","SEGUNDOS","CENTÉSIMOS"]
+},
+
+{
+lang:"tr",
+flag:"🇹🇷",
+title:"Sistem Geçici Olarak Kapalı",
+description:"Sistem, yazılımsal bir sorun nedeniyle geçici olarak hizmet dışıdır. Sorunun giderilmesi için çalışmalar devam etmektedir.",
+status:"Sistem bakımda",
+units:["GÜN","SAAT","DAKİKA","SANİYE","SALİSE"]
+}
+
+];
+
+
+/* DİL ELEMANLARI */
+
+const flagElement = document.getElementById("flag");
+const headingElement = document.getElementById("heading");
+const descriptionElement = document.getElementById("description");
+const statusElement = document.getElementById("statusText");
+
+const unitElements = [
+    document.getElementById("dayUnit"),
+    document.getElementById("hourUnit"),
+    document.getElementById("minuteUnit"),
+    document.getElementById("secondUnit"),
+    document.getElementById("millisecondUnit")
+];
+
+let languageIndex = 0;
+
+
+/* METİNLERİ ALANA SIĞDIR */
+
+function fitText(element, maxSize, minSize, maxLength) {
+    const length = Array.from(element.textContent).length;
+    const ratio = Math.min(1, maxLength / length);
+    const size = Math.max(minSize, maxSize * ratio);
+    element.style.fontSize = size + "px";
+}
+
+
+/* DİLİ DEĞİŞTİR */
+
+function showLanguage(index) {
+    const item = languages[index];
+
+    document.documentElement.lang = item.lang;
+    document.documentElement.dir = "ltr";
+
+    flagElement.textContent = item.flag;
+    headingElement.textContent = item.title;
+    descriptionElement.textContent = item.description;
+    statusElement.textContent = item.status;
+
+    item.units.forEach((unit, i) => {
+        unitElements[i].textContent = unit;
+    });
+
+    fitText(headingElement, 34, 20, 27);
+    fitText(descriptionElement, 15, 11, 145);
+}
+
+
+/* OTOMATİK DİL GEÇİŞİ: HER DİL 8 SANİYE */
+
+function nextLanguage() {
+    if (languageIndex >= languages.length - 1) {
+        showLanguage(languages.length - 1);
+        return;
     }
-    updateTimer();
-    window.setInterval(updateTimer, 1000);
-  </script>
+
+    languageIndex++;
+    showLanguage(languageIndex);
+
+    setTimeout(nextLanguage, 8000);
+}
+
+showLanguage(0);
+setTimeout(nextLanguage, 8000);
+
+
+/* KALICI 13 GÜNLÜK GERİ SAYIM */
+
+const STORAGE_KEY = "sistemBakimBitisZamani";
+const THIRTEEN_DAYS = 13 * 24 * 60 * 60 * 1000;
+
+let endTime = Number(localStorage.getItem(STORAGE_KEY));
+
+if (!endTime || !Number.isFinite(endTime)) {
+    endTime = Date.now() + THIRTEEN_DAYS;
+    localStorage.setItem(STORAGE_KEY, String(endTime));
+}
+
+
+/* GERİ SAYIM ELEMANLARI */
+
+const dayElement = document.getElementById("days");
+const hourElement = document.getElementById("hours");
+const minuteElement = document.getElementById("minutes");
+const secondElement = document.getElementById("seconds");
+const millisecondElement = document.getElementById("milliseconds");
+
+
+/* RAKAM ANİMASYONU */
+
+function updateNumber(element, value, animate = true) {
+    const formatted = String(value).padStart(2, "0");
+
+    if (element.textContent === formatted) return;
+
+    element.textContent = formatted;
+
+    if (animate) {
+        element.classList.remove("animate");
+        void element.offsetWidth;
+        element.classList.add("animate");
+    }
+}
+
+
+/* GERİ SAYIM */
+
+function updateCountdown() {
+    const remaining = Math.max(0, endTime - Date.now());
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining % 86400000) / 3600000);
+    const minutes = Math.floor((remaining % 3600000) / 60000);
+    const seconds = Math.floor((remaining % 60000) / 1000);
+    const milliseconds = Math.floor((remaining % 1000) / 10);
+
+    updateNumber(dayElement, days);
+    updateNumber(hourElement, hours);
+    updateNumber(minuteElement, minutes);
+    updateNumber(secondElement, seconds);
+    updateNumber(millisecondElement, milliseconds, false);
+
+    if (remaining <= 0) return;
+
+    setTimeout(updateCountdown, 10);
+}
+
+updateCountdown();
+
+</script>
+
 </body>
 </html>
