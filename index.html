@@ -364,30 +364,32 @@ h1 {
     </div>
 
     <div class="countdown">
+
         <div class="time-box">
             <span class="number" id="days">13</span>
             <span class="unit" id="dayUnit">GÜN</span>
         </div>
 
         <div class="time-box">
-            <span class="number" id="hours">00</span>
+            <span class="number" id="hours">19</span>
             <span class="unit" id="hourUnit">SAAT</span>
         </div>
 
         <div class="time-box">
-            <span class="number" id="minutes">00</span>
+            <span class="number" id="minutes">27</span>
             <span class="unit" id="minuteUnit">DAKİKA</span>
         </div>
 
         <div class="time-box">
-            <span class="number" id="seconds">00</span>
+            <span class="number" id="seconds">49</span>
             <span class="unit" id="secondUnit">SANİYE</span>
         </div>
 
         <div class="time-box">
-            <span class="number" id="milliseconds">00</span>
+            <span class="number" id="milliseconds">76</span>
             <span class="unit" id="millisecondUnit">SALİSE</span>
         </div>
+
     </div>
 
     <div class="status">
@@ -590,7 +592,7 @@ function showLanguage(index) {
 }
 
 
-/* OTOMATİK DİL GEÇİŞİ: HER DİL 8 SANİYE */
+/* OTOMATİK DİL GEÇİŞİ: 8 SANİYE */
 
 function nextLanguage() {
     if (languageIndex >= languages.length - 1) {
@@ -608,16 +610,57 @@ showLanguage(0);
 setTimeout(nextLanguage, 8000);
 
 
-/* KALICI 13 GÜNLÜK GERİ SAYIM */
+/* ORTAK SABİT BİTİŞ ZAMANI
+   21 Kasım 2026, 14:09:12.760 Türkiye saati
+   UTC karşılığı: 11:09:12.760Z */
 
-const STORAGE_KEY = "sistemBakimBitisZamani";
-const THIRTEEN_DAYS = 13 * 24 * 60 * 60 * 1000;
+const END_TIME = Date.parse("2026-11-21T11:09:12.760Z");
 
-let endTime = Number(localStorage.getItem(STORAGE_KEY));
+/* SUNUCU SAATİ */
 
-if (!endTime || !Number.isFinite(endTime)) {
-    endTime = Date.now() + THIRTEEN_DAYS;
-    localStorage.setItem(STORAGE_KEY, String(endTime));
+let serverTimeOffset = 0;
+let serverTimeSynced = false;
+let syncInProgress = false;
+
+async function syncServerTime() {
+
+    if (syncInProgress) return;
+
+    syncInProgress = true;
+
+    try {
+
+        const start = Date.now();
+
+        let response = await fetch(window.location.href, {
+            method: "HEAD",
+            cache: "no-store"
+        });
+
+        if (!response.ok || !response.headers.get("Date")) {
+            response = await fetch(window.location.href, {
+                method: "GET",
+                cache: "no-store"
+            });
+        }
+
+        const serverDate = response.headers.get("Date");
+
+        if (serverDate) {
+            const serverTime = new Date(serverDate).getTime();
+            const end = Date.now();
+
+            if (Number.isFinite(serverTime)) {
+                serverTimeOffset = serverTime - ((start + end) / 2);
+                serverTimeSynced = true;
+            }
+        }
+
+    } catch (error) {
+        console.warn("Sunucu saati senkronizasyonu başarısız:", error);
+    } finally {
+        syncInProgress = false;
+    }
 }
 
 
@@ -633,6 +676,7 @@ const millisecondElement = document.getElementById("milliseconds");
 /* RAKAM ANİMASYONU */
 
 function updateNumber(element, value, animate = true) {
+
     const formatted = String(value).padStart(2, "0");
 
     if (element.textContent === formatted) return;
@@ -647,10 +691,23 @@ function updateNumber(element, value, animate = true) {
 }
 
 
-/* GERİ SAYIM */
+/* TÜM CİHAZLAR İÇİN ORTAK GERİ SAYIM */
 
 function updateCountdown() {
-    const remaining = Math.max(0, endTime - Date.now());
+
+    const currentTime = Date.now() + serverTimeOffset;
+    const remaining = Math.max(0, END_TIME - currentTime);
+
+    if (remaining <= 0) {
+
+        dayElement.textContent = "00";
+        hourElement.textContent = "00";
+        minuteElement.textContent = "00";
+        secondElement.textContent = "00";
+        millisecondElement.textContent = "00";
+
+        return;
+    }
 
     const days = Math.floor(remaining / 86400000);
     const hours = Math.floor((remaining % 86400000) / 3600000);
@@ -664,12 +721,19 @@ function updateCountdown() {
     updateNumber(secondElement, seconds);
     updateNumber(millisecondElement, milliseconds, false);
 
-    if (remaining <= 0) return;
-
     setTimeout(updateCountdown, 10);
 }
 
-updateCountdown();
+
+/* BAŞLAT */
+
+syncServerTime().finally(() => {
+    updateCountdown();
+});
+
+/* HER 30 SANİYEDE SUNUCU SAATİNİ YENİLE */
+
+setInterval(syncServerTime, 30000);
 
 </script>
 
