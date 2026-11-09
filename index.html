@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f3f4f6">
+<title>ATA & WyS Software</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+                 "Segoe UI", sans-serif;
+    background: #f3f4f6;
+    color: #171717;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.screen {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: max(14px, env(safe-area-inset-top)) 18px max(14px, env(safe-area-inset-bottom));
+}
+
+.content {
+    width: 100%;
+    max-width: 390px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: clamp(7px, 1.45vh, 13px);
+    margin: auto;
+}
+
+/* LOGO */
+.brand-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 13px;
+    margin-bottom: 1px;
+    transform: translateY(-14px);
+}
+
+.logo {
+    display: block;
+    flex: 0 0 auto;
+    width: clamp(66px, 18vw, 88px);
+    height: clamp(66px, 18vw, 88px);
+    object-fit: contain;
+    border-radius: 21px;
+    box-shadow:
+        0 0 12px rgba(125, 130, 142, .24),
+        0 0 27px rgba(125, 130, 142, .19),
+        0 5px 17px rgba(0, 0, 0, .10);
+}
+
+.brand-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 3px;
+}
+
+.brand {
+    color: #d71920;
+    font-size: clamp(14px, 4.2vw, 18px);
+    font-weight: 850;
+    letter-spacing: -.5px;
+    white-space: nowrap;
+}
+
+.brand-sub {
+    color: #d71920;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    white-space: nowrap;
+}
+
+/* STATUS */
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    border-radius: 30px;
+    background: #fff3e6;
+    color: #c56b13;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+    background: #f39a36;
+    box-shadow: 0 0 8px rgba(243,154,54,.5);
+}
+
+h1 {
+    width: 100%;
+    white-space: nowrap;
+    color: #d5a21b;
+    font-size: clamp(12px, 4.25vw, 18px);
+    line-height: 1.2;
+    letter-spacing: -.55px;
+    font-weight: 900;
+    margin-top: 1px;
+}
+
+.description {
+    max-width: 320px;
+    width: 100%;
+    color: #777b84;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* MAINTENANCE CARD */
+.maintenance {
+    width: 100%;
+    min-width: 0;
+    background: rgba(255,255,255,.85);
+    border: 1px solid rgba(0,0,0,.055);
+    border-radius: 19px;
+    padding: 13px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    box-shadow: 0 5px 18px rgba(0,0,0,.035);
+}
+
+.maintenance-icon {
+    width: 39px;
+    height: 39px;
+    flex: 0 0 39px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: #f1f2f4;
+    font-size: 19px;
+}
+
+.maintenance > div:last-child {
+    min-width: 0;
+}
+
+.maintenance-title {
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.maintenance-text {
+    color: #858991;
+    font-size: 11px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* PREMIUM */
+.premium-heading {
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 800;
+    margin-top: 1px;
+}
+
+.premium-slider {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 20px;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+    position: relative;
+}
+
+.premium-slider:active {
+    cursor: grabbing;
+}
+
+.premium-track {
+    display: flex;
+    width: 200%;
+    transition: transform .55s cubic-bezier(.22,.75,.25,1);
+    will-change: transform;
+}
+
+.premium-card {
+    width: 50%;
+    min-width: 50%;
+    min-height: 96px;
+    padding: 15px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    text-align: left;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-card::after {
+    content: "";
+    position: absolute;
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    right: -38px;
+    top: -52px;
+    background: rgba(255,255,255,.12);
+}
+
+.monthly {
+    background: linear-gradient(120deg, #159b59, #20bd72);
+}
+
+.unlimited {
+    background: linear-gradient(120deg, #7138c9, #9855e9);
+}
+
+.premium-info {
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.premium-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    opacity: .88;
+    margin-bottom: 7px;
+}
+
+.premium-price {
+    font-size: clamp(25px, 7vw, 29px);
+    font-weight: 850;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.premium-period {
+    font-size: 11px;
+    opacity: .9;
+    margin-top: 5px;
+}
+
+.premium-side {
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 1;
+    text-align: right;
+}
+
+.premium-symbol {
+    font-size: 27px;
+    font-weight: 300;
+}
+
+.premium-access {
+    font-size: 10px;
+    font-weight: 700;
+    margin-top: 5px;
+    opacity: .95;
+    white-space: nowrap;
+}
+
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: -2px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 10px;
+    background: #c9cbd0;
+    transition: width .25s, background .25s;
+}
+
+.dot.active {
+    width: 19px;
+    background: #555b65;
+}
+
+/* PARTNERSHIP + FOOTER */
+.partnership {
+    width: 100%;
+    color: #777b84;
+    font-size: 10px;
+    line-height: 1.35;
+    font-weight: 700;
+    text-align: center;
+    overflow-wrap: anywhere;
+    transform: translateY(7px);
+}
+
+.footer {
+    margin-top: -3px;
+    color: #a0a3aa;
+    font-size: 9px;
+    line-height: 1.4;
+    transform: translateY(7px);
+}
+
+/* SHORT SCREENS */
+@media (max-height: 760px) {
+    .screen {
+        align-items: flex-start;
+        padding-top: max(10px, env(safe-area-inset-top));
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+
+    .content { gap: 7px; }
+
+    .logo {
+        width: 66px;
+        height: 66px;
+        border-radius: 18px;
+    }
+
+    .brand { font-size: 15px; }
+    .brand-sub { font-size: 8px; }
+
+    h1 {
+        font-size: clamp(11px, 3.8vw, 14px);
+    }
+
+    .description {
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    .maintenance { padding: 10px 12px; }
+
+    .maintenance-icon {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+    }
+
+    .premium-card {
+        min-height: 84px;
+        padding: 12px 14px;
+    }
+
+    .premium-price { font-size: 25px; }
+    .premium-label { margin-bottom: 5px; }
+}
+
+@media (max-height: 620px) {
+    .logo {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+    }
+
+    .content { gap: 5px; }
+    .brand { font-size: 14px; }
+    .brand-sub { letter-spacing: 2px; }
+
+    h1 {
+        font-size: clamp(10px, 3.5vw, 13px);
+    }
+
+    .description { font-size: 10px; }
+    .maintenance-text { font-size: 10px; }
+    .premium-card { min-height: 76px; }
+    .footer { font-size: 9px; }
+}
+
+@media (max-width: 350px) {
+    .brand-header { gap: 9px; }
+
+    .brand {
+        font-size: 13px;
+        letter-spacing: -.55px;
+    }
+
+    .brand-sub {
+        font-size: 8px;
+        letter-spacing: 2px;
+    }
+
+    .screen {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .content { gap: 6px; }
+
+    .logo {
+        width: 58px;
+        height: 58px;
+    }
+
+    h1 {
+        font-size: clamp(10px, 3.45vw, 12px);
+    }
+
+    .premium-card { padding: 11px; }
+
+    .premium-label,
+    .premium-access {
+        font-size: 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="screen">
+    <main class="content">
+
+        <!-- LOGO + MARKA -->
+        <header class="brand-header">
+
+            <img class="logo"
+            src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABwUFRkVEhwZFxkgHhwiK0cuKycnK1c+QjRHZ1tta2VbZGJygKSLcnmbe2JkjsKQm6mut7m3bonJ18ey1qS0t7D/2wBDAR4gICslK1QuLlSwdWR1sLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLD/wgARCACyALQDASIAAhEBAxEB/8QAGQABAQEBAQEAAAAAAAAAAAAAAAECAwQF/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/9oADAMBAAIQAxAAAAH6FhLMq0yNsl0zYqCoKlAAIsQKY1goqiFlAFllAAqUAAikxnWatlAFlAFllAAAqUAAxLLFlAFFCFQoAAAFlAMSyxc4Ot48z1PN1Ojj1l1nWTSUJQlBk1cbAMSyzyeXfY9Pk9GDHr408HsnA+pnWZefScdTPp4LN9uNzd8Ks138vplolxw7crPP65s+f330OXm9/M7eL34M7zuW+H3Z1Hj92Dfh9nmT0cvRiXh6JuqrN5Zs1KlLZYpSLC5sWiARKoQtzTaJeWdZ1KC6zoqIsBYKgsAABYNiOeOvLS2LKiW3NKIWCgAELAWaNIi8+g4OmNyWVVlhQKgUiwSiLSaCKigQMU0oigohQgAAJQA//8QAKBAAAgECBQIHAQEAAAAAAAAAAQIAAxESISJAQQQQEyAjMDIzUDFg/9oACAEBAAEFAv8ACnbn847c/hc+6TYLUDFqgSeOs8dIjh41RUINxOb9r9r37kgQEHy12yU4HZFeVkVVpU1ZFUJDd26dtM5qfwfG+bfFMhLxRiJTy/ZVrrlRa6dR8aH11mslBdK+nVnLZqD6dvTY6GGhTopwob4yvkqthSgIwxLRNn6j40PrqnFUAsOoXOm2JOZyRpGZh0wZKKkqMDFyWGMgeKMInhLiZQ4VcIFJQ0ZQwRAk5lheYQITYDXUhUGBQO59vn2ztztztztzuCNwRuDtP//EABYRAQEBAAAAAAAAAAAAAAAAAAFgEP/aAAgBAwEBPwGOcYD/xAAcEQEAAQQDAAAAAAAAAAAAAAABABAgMEBBUGD/2gAIAQIBAT8B8FxY4Bgwo7R0n//EACEQAAICAQMFAQAAAAAAAAAAAAABEBEhAiAiMUFRcHFA/9oACAEBAAY/AvaNmDJ3O5gpl/goTMmC2YGyvG29uTG5M+C+x9G/O1wpbOJy2vUNFeRRRQtQpooSh6Y5FIU5KUWZKRcUzE3HQsvtGUdPaX//xAAnEAACAQMDBAICAwAAAAAAAAABEQAQITFBUWEgMEBxgbGh8FBgkf/aAAgBAQABPyGrjjjjj8DEfjE/0QP8yO67h7Yz9dw0EYsCKzPmGhdfafqE/QIyvtvL4HxACDBoM/UIDJVEad6AMC65QzCGpooN9zCGP0RAQcCiN3vFpLe8DnAawwP38RhHQM/UCww2B4g/1Q0URpKdEuHeCMYug2wUND8RP4lo6WiPeyifdLXrZL84Q7Jw0aDP1BZTDYPMfyyzG0ztoLbAGKNIICwxQxhubT6wTlCX/wAJ+VPulqaWEVhoIgDWxjlrgzX6oWC5xhcK0I8qCVgMqadhgUXIKBqUMbbQIcFCTKC3aDAb4gr4pmUnmmgyACGvvNfqmkXoCGLoNyaJZUzBQO6GfrpIByHAAMBdApl21d9oUy6R4Apn0g+AKZ0FH4IoFqAqE+EPGAOpUXYUUVVFF14eJ//aAAwDAQACAAMAAAAQnZ1AKCOKww/B9VXp1qW+KCCz/DXpVqW++KCODrVg+meW++q+vrtV+W++2+q+7H7NbW8E+vO8L/L1lSAEXWUwZZzRxUyzR1tM6WoaTlNdxxH/ALvJqM5wwx3/AMPsEgyXcsdu6nP3+B91+P8AjfjD/8QAHREAAgEFAQEAAAAAAAAAAAAAAREAITAxQEEQYP/aAAgBAwEBPxD4LBjQgKpM1gXLAOEPwQeQAtnaN1a//8QAHBEBAAMAAgMAAAAAAAAAAAAAAQARMCExECBB/9oACAECAQE/EJUqVKwNDQ0ND2q4S0iXzCiyW++D2olAzjywT7EVR4OtDqVHLpoNQR0M/wD/xAAoEAACAQMDAwQDAQEAAAAAAAABEQAQITFBUXEwYYEgQKHBkbHw0eH/2gAIAQEAAT8QccazDtrpUcccfePvPM8zz6DUQlO8LGP2RFMBwhNB7QtKj2ZmR59qKZnn2+R5oPaCZHn0j1Bi1APpCCZnnp/AffSFMzzBC8oDMPjoDQKCAWBhHO3IbUgp6FopfIR2NQxrAxT4L7hsATYZo227HNI6Um1cDg7Quhk7QZpmeYIhzcvBBSkYJG5R5SCxBUKsBKW2kZAYLJD2JJdi8QTBOT7BGWuTHBp8N9x2xKgzfKGAni6N/ZQ182zoXgAgMOHFJIunmDYODdmYBlnemZ5oZSLoeEGi3eNIqEu4+p/Z2M/fjwTd/DWAT7XEI5QeEdf1T4b7iTqmIgTuCvzFq3u8Gd/ZeJZmRB/2BLTij4hTyCV/sOlOzSgGsjhGCERghimZ5jGDovMvkH9XgiuhDnSENZFzkT+/sZ+3D5cLzawePKiUWDyaR0mweQQfG+6CFapBhewRz+Af+mFEEHBmwBCBaCy3MFcCDkCN5JtqFyIC9MjzLYowBKNyTeAw6c3Is4cNAXco/dwm5vAgCKXc70MHte2RC4mLiCcHxvuhOwTvoq4bodNQKtCQCJz2jhxgJ31h1iB3zMqZHmOOAwGD0uF+F9+kCgBsRAKAGwFHHMqZuaCCCCCAQ1CG2QB0HTKmbmOomEFo4+o5lTJzQUAgAEYxHV0fRyoN35oDiUMOOOOPqZQxzbQhGmZHUHpP0DCb0Ue2kNqCog6jJgKpAIRmxcQnGERiMAgEUURjRo0RiMaNBOMUXoAXKD0CDoiH0f/Z"
+            alt="ATA & WyS Software Logo">
+
+            <div class="brand-copy">
+                <div class="brand">ATA & WyS Software</div>
+                <div class="brand-sub">SOFTWARE SYSTEMS</div>
+            </div>
+
+        </header>
+
+        <h1>Sistem Geçici Olarak Devre Dışı</h1>
+
+        <p class="description">
+            Sistemimiz, daha güvenli ve daha kararlı bir kullanım deneyimi
+            sunmak amacıyla yazılımsal güncellemelerden geçmektedir.
+        </p>
+
+        <section class="maintenance">
+            <div class="maintenance-icon">⚙️</div>
+            <div>
+                <div class="maintenance-title">Sistem Bakımda</div>
+                <div class="maintenance-text">
+                    Altyapı, performans ve güvenlik iyileştirmeleri gerçekleştiriliyor.
+                </div>
+            </div>
+        </section>
+
+        <div class="premium-heading">Premium Üyelik</div>
+
+        <section class="premium-slider" id="premiumSlider"
+                 aria-label="Premium üyelik seçenekleri">
+
+            <div class="premium-track" id="premiumTrack">
+
+                <article class="premium-card monthly">
+                    <div class="premium-info">
+                        <div class="premium-label">AYLIK PREMIUM</div>
+                        <div class="premium-price">200 TL</div>
+                        <div class="premium-period">1 aylık erişim</div>
+                    </div>
+
+                    <div class="premium-side">
+                        <div class="premium-symbol">✓</div>
+                        <div class="premium-access">PREMIUM</div>
+                    </div>
+                </article>
+
+                <article class="premium-card unlimited">
+                    <div class="premium-info">
+                        <div class="premium-label">SINIRSIZ PREMIUM</div>
+                        <div class="premium-price">600 TL</div>
+                        <div class="premium-period">Tek seferlik ödeme</div>
+                    </div>
+
+                    <div class="premium-side">
+                        <div class="premium-symbol">∞</div>
+                        <div class="premium-access">SINIRSIZ ERİŞİM</div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <div class="dots" aria-label="Üyelik seçeneği">
+            <span class="dot active" id="dot0"></span>
+            <span class="dot" id="dot1"></span>
+        </div>
+
+        <!-- GÜNCELLEME BİLDİRİMİ EN ALTTA -->
+        <div class="status">
+            <span class="status-dot"></span>
+            SİSTEM GÜNCELLEMESİ
+        </div>
+
+        <div class="partnership">
+            Bu Sistem ATA S. İle WyS İş Ortaklığıdır
+        </div>
+
+        <footer class="footer">
+            <strong>ATA & WyS Software</strong><br>
+            © 2026 · Tüm hakları saklıdır.
+        </footer>
+
+    </main>
+</div>
+
+<script>
+(() => {
+    const slider = document.getElementById("premiumSlider");
+    const track = document.getElementById("premiumTrack");
+
+    const dots = [
+        document.getElementById("dot0"),
+        document.getElementById("dot1")
+    ];
+
+    const INTERVAL = 4000;
+    const SWIPE_THRESHOLD = 40;
+
+    let current = 0;
+    let timer = null;
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let activePointer = null;
+    let isHolding = false;
+    let isHorizontalSwipe = false;
+
+    function showSlide(index) {
+        current = (index + 2) % 2;
+
+        track.style.transform =
+            `translateX(-${current * 50}%)`;
+
+        dots.forEach((dot, i) => {
+            dot.classList.toggle("active", i === current);
+        });
+    }
+
+    function stopTimer() {
+        if (timer !== null) {
+            clearInterval(timer);
+            timer = null;
+        }
+    }
+
+    function startTimer() {
+        stopTimer();
+
+        if (isHolding || document.hidden) return;
+
+        timer = setInterval(() => {
+            showSlide(current + 1);
+        }, INTERVAL);
+    }
+
+    function pauseWhileHolding() {
+        isHolding = true;
+        stopTimer();
+    }
+
+    function resumeAfterHolding() {
+        if (!isHolding) return;
+
+        isHolding = false;
+        startTimer();
+    }
+
+    slider.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+
+        activePointer = event.pointerId;
+
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+
+        isHorizontalSwipe = false;
+
+        pauseWhileHolding();
+
+        try {
+            slider.setPointerCapture(event.pointerId);
+        } catch (_) {}
+    });
+
+    slider.addEventListener("pointermove", (event) => {
+        if (activePointer !== event.pointerId) return;
+
+        const dx = event.clientX - pointerStartX;
+        const dy = event.clientY - pointerStartY;
+
+        if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+            isHorizontalSwipe = true;
+        }
+    });
+
+    function finishPointer(event) {
+        if (activePointer !== event.pointerId) return;
+
+        const dx = event.clientX - pointerStartX;
+
+        if (isHorizontalSwipe && Math.abs(dx) >= SWIPE_THRESHOLD) {
+            showSlide(current + (dx < 0 ? 1 : -1));
+        }
+
+        activePointer = null;
+        isHorizontalSwipe = false;
+
+        resumeAfterHolding();
+    }
+
+    slider.addEventListener("pointerup", finishPointer);
+    slider.addEventListener("pointercancel", finishPointer);
+
+    slider.addEventListener("lostpointercapture", () => {
+        activePointer = null;
+        isHorizontalSwipe = false;
+
+        resumeAfterHolding();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            stopTimer();
+        } else if (!isHolding) {
+            startTimer();
+        }
+    });
+
+    startTimer();
+})();
+</script>
+
+</body>
+</html>
