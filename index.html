@@ -3,738 +3,666 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#8b0035">
-<title>Sistem Geçici Olarak Kapalı</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f3f4f6">
+<title>ATA & WyS Software</title>
 
 <style>
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
     width: 100%;
     min-height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+                 "Segoe UI", sans-serif;
+    background: #f3f4f6;
+    color: #171717;
 }
 
 body {
     min-height: 100vh;
     min-height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 18px;
     overflow-x: hidden;
-    color: #292929;
-
-    background: linear-gradient(
-        125deg,
-        #8b0035,
-        #a83200,
-        #9b7600,
-        #006b38,
-        #00528f,
-        #32106b,
-        #790080,
-        #8b0035
-    );
-
-    background-size: 600% 600%;
-    animation: rainbow 12s ease-in-out infinite;
+    overflow-y: auto;
 }
 
-@keyframes rainbow {
-    0% { background-position: 0% 50%; }
-    25% { background-position: 50% 100%; }
-    50% { background-position: 100% 50%; }
-    75% { background-position: 50% 0%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* ANA YERLEŞİM */
-
-.container {
+.screen {
     width: 100%;
-    max-width: 440px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: max(14px, env(safe-area-inset-top)) 18px max(14px, env(safe-area-inset-bottom));
+}
+
+.content {
+    width: 100%;
+    max-width: 390px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    gap: clamp(7px, 1.45vh, 13px);
+    margin: auto;
 }
 
-/* SAAT */
+/* LOGO */
+.brand-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 13px;
+    margin-bottom: 1px;
+    transform: translateY(-14px);
+}
 
-.clock-icon {
-    width: 88px;
-    height: 88px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #eeeeF1, #d9d9de);
+.logo {
+    display: block;
+    flex: 0 0 auto;
+    width: clamp(66px, 18vw, 88px);
+    height: clamp(66px, 18vw, 88px);
+    object-fit: contain;
+    border-radius: 21px;
     box-shadow:
-        8px 8px 18px rgba(0,0,0,.09),
-        -6px -6px 16px rgba(255,255,255,.9),
-        inset 1px 1px 3px rgba(255,255,255,.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+        0 0 12px rgba(125, 130, 142, .24),
+        0 0 27px rgba(125, 130, 142, .19),
+        0 5px 17px rgba(0, 0, 0, .10);
 }
 
-.clock-face {
-    width: 66px;
-    height: 66px;
-    border: 2px solid #a8a8ae;
-    border-radius: 50%;
-    position: relative;
-    background: #e7e7eb;
-}
-
-.clock-center {
-    position: absolute;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #77777e;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 3;
-}
-
-.clock-hand {
-    position: absolute;
-    left: 50%;
-    bottom: 50%;
-    transform-origin: bottom center;
-    border-radius: 5px;
-}
-
-.hour-hand {
-    width: 3px;
-    height: 17px;
-    background: #77777e;
-    animation: hourMove 24s linear infinite;
-}
-
-.minute-hand {
-    width: 2px;
-    height: 24px;
-    background: #9999a0;
-    animation: minuteMove 8s linear infinite;
-}
-
-@keyframes hourMove {
-    to { transform: translateX(-50%) rotate(360deg); }
-}
-
-@keyframes minuteMove {
-    to { transform: translateX(-50%) rotate(360deg); }
-}
-
-/* DİL VE METİNLER */
-
-.flag {
-    font-size: 27px;
-    height: 34px;
-    line-height: 34px;
-    flex-shrink: 0;
-}
-
-.title-area {
-    width: 100%;
-    height: 92px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-h1 {
-    width: 100%;
-    font-size: 34px;
-    font-weight: 650;
-    letter-spacing: -1.2px;
-    line-height: 1.2;
-    color: #292929;
-    overflow-wrap: anywhere;
-}
-
-.description-area {
-    width: 100%;
-    height: 82px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.description {
-    width: 100%;
-    max-width: 350px;
-    font-size: 15px;
-    line-height: 1.55;
-    color: #ffffff;
-    overflow-wrap: anywhere;
-}
-
-/* GERİ SAYIM */
-
-.countdown {
-    width: 100%;
-    direction: ltr;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 6px;
-    margin-top: 5px;
-    flex-shrink: 0;
-}
-
-.time-box {
+.brand-copy {
     min-width: 0;
-    height: 82px;
-    padding: 12px 2px 10px;
-    background: rgba(255,255,255,.78);
-    border: 1px solid rgba(255,255,255,.9);
-    border-radius: 15px;
-    box-shadow: 0 5px 18px rgba(0,0,0,.045);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    gap: 3px;
 }
 
-.number {
-    display: block;
-    font-size: clamp(17px, 4.5vw, 27px);
-    font-weight: 650;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -1px;
-    color: #34343a;
+.brand {
+    color: #d71920;
+    font-size: clamp(14px, 4.2vw, 18px);
+    font-weight: 850;
+    letter-spacing: -.5px;
     white-space: nowrap;
 }
 
-.number.animate {
-    animation: numberChange .35s ease;
-}
-
-@keyframes numberChange {
-    0% {
-        opacity: .25;
-        transform: translateY(7px);
-        filter: blur(3px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-        filter: blur(0);
-    }
-}
-
-.unit {
-    display: block;
-    font-size: clamp(8px, 2vw, 10px);
-    font-weight: 600;
-    letter-spacing: .3px;
-    color: #ffffff;
-    margin-top: 7px;
+.brand-sub {
+    color: #d71920;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
     white-space: nowrap;
 }
 
-/* DURUM */
-
+/* STATUS */
 .status {
-    height: 20px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 7px;
-    color: #ffffff;
-    font-size: 12px;
-    flex-shrink: 0;
+    padding: 7px 12px;
+    border-radius: 30px;
+    background: #fff3e6;
+    color: #c56b13;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-top: 2px;
 }
 
 .status-dot {
     width: 7px;
     height: 7px;
-    background: #ffffff;
+    flex: 0 0 7px;
     border-radius: 50%;
-    animation: pulse 1.8s ease-in-out infinite;
+    background: #f39a36;
+    box-shadow: 0 0 8px rgba(243,154,54,.5);
 }
 
-@keyframes pulse {
-    0%,100% { opacity: .4; }
-    50% { opacity: 1; }
-}
-
-/* ALT BİLGİ */
-
-.footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    margin-top: 2px;
+h1 {
     width: 100%;
-    flex-shrink: 0;
-    direction: ltr;
+    white-space: nowrap;
+    color: #d5a21b;
+    font-size: clamp(12px, 4.25vw, 18px);
+    line-height: 1.2;
+    letter-spacing: -.55px;
+    font-weight: 900;
+    margin-top: 1px;
 }
 
-.footer-main {
-    color: #ffffff;
-    font-size: 11px;
-    line-height: 1.4;
-}
-
-.footer-description {
-    color: #ffffff;
-    font-size: 10px;
+.description {
+    max-width: 320px;
+    width: 100%;
+    color: #777b84;
+    font-size: 13px;
     line-height: 1.5;
 }
 
-/* MARKA YAZILARI */
-
-.brand-highlight {
-    color: #d62828;
-    font-weight: 900;
+/* MAINTENANCE CARD */
+.maintenance {
+    width: 100%;
+    min-width: 0;
+    background: rgba(255,255,255,.85);
+    border: 1px solid rgba(0,0,0,.055);
+    border-radius: 19px;
+    padding: 13px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    box-shadow: 0 5px 18px rgba(0,0,0,.035);
 }
 
-/* KÜÇÜK EKRAN */
+.maintenance-icon {
+    width: 39px;
+    height: 39px;
+    flex: 0 0 39px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: #f1f2f4;
+    font-size: 19px;
+}
 
-@media (max-height: 680px) {
-    .container {
-        gap: 12px;
+.maintenance > div:last-child {
+    min-width: 0;
+}
+
+.maintenance-title {
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.maintenance-text {
+    color: #858991;
+    font-size: 11px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* PREMIUM */
+.premium-heading {
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 800;
+    margin-top: 1px;
+}
+
+.premium-slider {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 20px;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+    position: relative;
+}
+
+.premium-slider:active {
+    cursor: grabbing;
+}
+
+.premium-track {
+    display: flex;
+    width: 200%;
+    transition: transform .55s cubic-bezier(.22,.75,.25,1);
+    will-change: transform;
+}
+
+.premium-card {
+    width: 50%;
+    min-width: 50%;
+    min-height: 96px;
+    padding: 15px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    text-align: left;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-card::after {
+    content: "";
+    position: absolute;
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    right: -38px;
+    top: -52px;
+    background: rgba(255,255,255,.12);
+}
+
+.monthly {
+    background: linear-gradient(120deg, #159b59, #20bd72);
+}
+
+.unlimited {
+    background: linear-gradient(120deg, #7138c9, #9855e9);
+}
+
+.premium-info {
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.premium-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    opacity: .88;
+    margin-bottom: 7px;
+}
+
+.premium-price {
+    font-size: clamp(25px, 7vw, 29px);
+    font-weight: 850;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.premium-period {
+    font-size: 11px;
+    opacity: .9;
+    margin-top: 5px;
+}
+
+.premium-side {
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 1;
+    text-align: right;
+}
+
+.premium-symbol {
+    font-size: 27px;
+    font-weight: 300;
+}
+
+.premium-access {
+    font-size: 10px;
+    font-weight: 700;
+    margin-top: 5px;
+    opacity: .95;
+    white-space: nowrap;
+}
+
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: -2px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 10px;
+    background: #c9cbd0;
+    transition: width .25s, background .25s;
+}
+
+.dot.active {
+    width: 19px;
+    background: #555b65;
+}
+
+/* PARTNERSHIP + FOOTER */
+.partnership {
+    width: 100%;
+    color: #777b84;
+    font-size: 10px;
+    line-height: 1.35;
+    font-weight: 700;
+    text-align: center;
+    overflow-wrap: anywhere;
+    transform: translateY(7px);
+}
+
+.footer {
+    margin-top: -3px;
+    color: #a0a3aa;
+    font-size: 9px;
+    line-height: 1.4;
+    transform: translateY(7px);
+}
+
+/* SHORT SCREENS */
+@media (max-height: 760px) {
+    .screen {
+        align-items: flex-start;
+        padding-top: max(10px, env(safe-area-inset-top));
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
     }
 
-    .clock-icon {
-        width: 70px;
-        height: 70px;
+    .content { gap: 7px; }
+
+    .logo {
+        width: 66px;
+        height: 66px;
+        border-radius: 18px;
     }
 
-    .clock-face {
-        width: 54px;
-        height: 54px;
+    .brand { font-size: 15px; }
+    .brand-sub { font-size: 8px; }
+
+    h1 {
+        font-size: clamp(11px, 3.8vw, 14px);
     }
 
-    .hour-hand { height: 14px; }
-    .minute-hand { height: 19px; }
-
-    .title-area {
-        height: 78px;
+    .description {
+        font-size: 11px;
+        line-height: 1.4;
     }
 
-    .description-area {
-        height: 70px;
+    .maintenance { padding: 10px 12px; }
+
+    .maintenance-icon {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
     }
 
-    .time-box {
-        height: 74px;
+    .premium-card {
+        min-height: 84px;
+        padding: 12px 14px;
+    }
+
+    .premium-price { font-size: 25px; }
+    .premium-label { margin-bottom: 5px; }
+}
+
+@media (max-height: 620px) {
+    .logo {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+    }
+
+    .content { gap: 5px; }
+    .brand { font-size: 14px; }
+    .brand-sub { letter-spacing: 2px; }
+
+    h1 {
+        font-size: clamp(10px, 3.5vw, 13px);
+    }
+
+    .description { font-size: 10px; }
+    .maintenance-text { font-size: 10px; }
+    .premium-card { min-height: 76px; }
+    .footer { font-size: 9px; }
+}
+
+@media (max-width: 350px) {
+    .brand-header { gap: 9px; }
+
+    .brand {
+        font-size: 13px;
+        letter-spacing: -.55px;
+    }
+
+    .brand-sub {
+        font-size: 8px;
+        letter-spacing: 2px;
+    }
+
+    .screen {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .content { gap: 6px; }
+
+    .logo {
+        width: 58px;
+        height: 58px;
+    }
+
+    h1 {
+        font-size: clamp(10px, 3.45vw, 12px);
+    }
+
+    .premium-card { padding: 11px; }
+
+    .premium-label,
+    .premium-access {
+        font-size: 9px;
     }
 }
 </style>
 </head>
 
 <body>
+<div class="screen">
+    <main class="content">
 
-<main class="container">
+        <!-- LOGO + MARKA -->
+        <header class="brand-header">
 
-    <div class="clock-icon">
-        <div class="clock-face">
-            <div class="clock-hand hour-hand"></div>
-            <div class="clock-hand minute-hand"></div>
-            <div class="clock-center"></div>
-        </div>
-    </div>
+            <img class="logo"
+            src="data:image/jpeg;base64,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"
+            alt="ATA & WyS Software Logo">
 
-    <div class="flag" id="flag">🇹🇷</div>
+            <div class="brand-copy">
+                <div class="brand">ATA & WyS Software</div>
+                <div class="brand-sub">SOFTWARE SYSTEMS</div>
+            </div>
 
-    <div class="title-area">
-        <h1 id="heading">Sistem Geçici Olarak Kapalı</h1>
-    </div>
+        </header>
 
-    <div class="description-area">
-        <p class="description" id="description">
-            Sistem, yazılımsal bir sorun nedeniyle geçici olarak hizmet dışıdır.
+        <h1>Sistem Geçici Olarak Devre Dışı</h1>
+
+        <p class="description">
+            Sistemimiz, daha güvenli ve daha kararlı bir kullanım deneyimi
+            sunmak amacıyla yazılımsal güncellemelerden geçmektedir.
         </p>
-    </div>
 
-    <div class="countdown">
+        <section class="maintenance">
+            <div class="maintenance-icon">⚙️</div>
+            <div>
+                <div class="maintenance-title">Sistem Bakımda</div>
+                <div class="maintenance-text">
+                    Altyapı, performans ve güvenlik iyileştirmeleri gerçekleştiriliyor.
+                </div>
+            </div>
+        </section>
 
-        <div class="time-box">
-            <span class="number" id="days">13</span>
-            <span class="unit" id="dayUnit">GÜN</span>
+        <div class="premium-heading">Premium Üyelik</div>
+
+        <section class="premium-slider" id="premiumSlider"
+                 aria-label="Premium üyelik seçenekleri">
+
+            <div class="premium-track" id="premiumTrack">
+
+                <article class="premium-card monthly">
+                    <div class="premium-info">
+                        <div class="premium-label">AYLIK PREMIUM</div>
+                        <div class="premium-price">200 TL</div>
+                        <div class="premium-period">1 aylık erişim</div>
+                    </div>
+
+                    <div class="premium-side">
+                        <div class="premium-symbol">✓</div>
+                        <div class="premium-access">PREMIUM</div>
+                    </div>
+                </article>
+
+                <article class="premium-card unlimited">
+                    <div class="premium-info">
+                        <div class="premium-label">SINIRSIZ PREMIUM</div>
+                        <div class="premium-price">600 TL</div>
+                        <div class="premium-period">Tek seferlik ödeme</div>
+                    </div>
+
+                    <div class="premium-side">
+                        <div class="premium-symbol">∞</div>
+                        <div class="premium-access">SINIRSIZ ERİŞİM</div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <div class="dots" aria-label="Üyelik seçeneği">
+            <span class="dot active" id="dot0"></span>
+            <span class="dot" id="dot1"></span>
         </div>
 
-        <div class="time-box">
-            <span class="number" id="hours">19</span>
-            <span class="unit" id="hourUnit">SAAT</span>
+        <!-- GÜNCELLEME BİLDİRİMİ EN ALTTA -->
+        <div class="status">
+            <span class="status-dot"></span>
+            SİSTEM GÜNCELLEMESİ
         </div>
 
-        <div class="time-box">
-            <span class="number" id="minutes">27</span>
-            <span class="unit" id="minuteUnit">DAKİKA</span>
+        <div class="partnership">
+            Bu Sistem ATA S. İle WyS İş Ortaklığıdır
         </div>
 
-        <div class="time-box">
-            <span class="number" id="seconds">49</span>
-            <span class="unit" id="secondUnit">SANİYE</span>
-        </div>
+        <footer class="footer">
+            <strong>ATA & WyS Software</strong><br>
+            © 2026 · Tüm hakları saklıdır.
+        </footer>
 
-        <div class="time-box">
-            <span class="number" id="milliseconds">76</span>
-            <span class="unit" id="millisecondUnit">SALİSE</span>
-        </div>
-
-    </div>
-
-    <div class="status">
-        <span class="status-dot"></span>
-        <span id="statusText">Sistem bakımda</span>
-    </div>
-
-    <footer class="footer">
-
-        <div class="footer-main">
-            <span class="brand-highlight">ATA</span> Software -
-            Admin <span class="brand-highlight">WyS</span> -
-            Sistem Güncelleme
-        </div>
-
-        <div class="footer-description">
-            Bu sistem <span class="brand-highlight">WyS</span> tarafından onarılmaktadır.
-            <span class="brand-highlight">ATA</span>
-            <span class="brand-highlight">&</span>
-            <span class="brand-highlight">WyS</span> Software
-        </div>
-
-    </footer>
-
-</main>
+    </main>
+</div>
 
 <script>
+(() => {
+    const slider = document.getElementById("premiumSlider");
+    const track = document.getElementById("premiumTrack");
 
-/* TÜM DİLLER */
+    const dots = [
+        document.getElementById("dot0"),
+        document.getElementById("dot1")
+    ];
 
-const languages = [
+    const INTERVAL = 4000;
+    const SWIPE_THRESHOLD = 40;
 
-{
-lang:"tr",
-flag:"🇹🇷",
-title:"Sistem Geçici Olarak Kapalı",
-description:"Sistem, yazılımsal bir sorun nedeniyle geçici olarak hizmet dışıdır. Sorunun giderilmesi için çalışmalar devam etmektedir.",
-status:"Sistem bakımda",
-units:["GÜN","SAAT","DAKİKA","SANİYE","SALİSE"]
-},
+    let current = 0;
+    let timer = null;
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let activePointer = null;
+    let isHolding = false;
+    let isHorizontalSwipe = false;
 
-{
-lang:"en",
-flag:"🇬🇧",
-title:"System Temporarily Unavailable",
-description:"The system is temporarily unavailable due to a software issue. Work is underway to resolve the problem.",
-status:"System maintenance",
-units:["DAYS","HOURS","MINUTES","SECONDS","CENTISECONDS"]
-},
+    function showSlide(index) {
+        current = (index + 2) % 2;
 
-{
-lang:"ar",
-flag:"🇸🇦",
-title:"النظام مغلق مؤقتًا",
-description:"النظام غير متاح مؤقتًا بسبب مشكلة برمجية. العمل جارٍ لحل المشكلة.",
-status:"النظام قيد الصيانة",
-units:["يوم","ساعة","دقيقة","ثانية","جزء من الثانية"]
-},
+        track.style.transform =
+            `translateX(-${current * 50}%)`;
 
-{
-lang:"zh",
-flag:"🇨🇳",
-title:"系统暂时关闭",
-description:"由于软件问题，系统暂时无法使用。目前正在进行修复工作。",
-status:"系统维护中",
-units:["天","小时","分钟","秒","百分之一秒"]
-},
+        dots.forEach((dot, i) => {
+            dot.classList.toggle("active", i === current);
+        });
+    }
 
-{
-lang:"ja",
-flag:"🇯🇵",
-title:"システム一時停止中",
-description:"ソフトウェアの問題により、システムを一時的に停止しています。現在、問題の解決に取り組んでいます。",
-status:"システムメンテナンス中",
-units:["日","時間","分","秒","百分の一秒"]
-},
+    function stopTimer() {
+        if (timer !== null) {
+            clearInterval(timer);
+            timer = null;
+        }
+    }
 
-{
-lang:"ko",
-flag:"🇰🇷",
-title:"시스템 임시 중단",
-description:"소프트웨어 문제로 인해 시스템을 일시적으로 사용할 수 없습니다. 현재 문제를 해결하고 있습니다.",
-status:"시스템 유지보수 중",
-units:["일","시간","분","초","100분의 1초"]
-},
+    function startTimer() {
+        stopTimer();
 
-{
-lang:"fr",
-flag:"🇫🇷",
-title:"Système temporairement indisponible",
-description:"Le système est temporairement indisponible en raison d'un problème logiciel. Nous travaillons à résoudre le problème.",
-status:"Maintenance du système",
-units:["JOURS","HEURES","MINUTES","SECONDES","CENTIÈMES"]
-},
+        if (isHolding || document.hidden) return;
 
-{
-lang:"es",
-flag:"🇪🇸",
-title:"Sistema temporalmente cerrado",
-description:"El sistema no está disponible temporalmente debido a un problema de software. Estamos trabajando para solucionarlo.",
-status:"Mantenimiento del sistema",
-units:["DÍAS","HORAS","MINUTOS","SEGUNDOS","CENTÉSIMAS"]
-},
+        timer = setInterval(() => {
+            showSlide(current + 1);
+        }, INTERVAL);
+    }
 
-{
-lang:"de",
-flag:"🇩🇪",
-title:"System vorübergehend geschlossen",
-description:"Das System ist aufgrund eines Softwareproblems vorübergehend nicht verfügbar. Wir arbeiten an einer Lösung.",
-status:"Systemwartung",
-units:["TAGE","STUNDEN","MINUTEN","SEKUNDEN","HUNDERTSTEL"]
-},
+    function pauseWhileHolding() {
+        isHolding = true;
+        stopTimer();
+    }
 
-{
-lang:"it",
-flag:"🇮🇹",
-title:"Sistema temporaneamente non disponibile",
-description:"Il sistema è temporaneamente non disponibile a causa di un problema software. Stiamo lavorando per risolverlo.",
-status:"Manutenzione del sistema",
-units:["GIORNI","ORE","MINUTI","SECONDI","CENTESIMI"]
-},
+    function resumeAfterHolding() {
+        if (!isHolding) return;
 
-{
-lang:"ru",
-flag:"🇷🇺",
-title:"Система временно недоступна",
-description:"Система временно недоступна из-за программной ошибки. В настоящее время ведутся работы по её устранению.",
-status:"Техническое обслуживание",
-units:["ДНИ","ЧАСЫ","МИНУТЫ","СЕКУНДЫ","СОТЫЕ"]
-},
+        isHolding = false;
+        startTimer();
+    }
 
-{
-lang:"pt",
-flag:"🇵🇹",
-title:"Sistema temporariamente indisponível",
-description:"O sistema está temporariamente indisponível devido a um problema de software. Estamos trabalhando para resolver o problema.",
-status:"Manutenção do sistema",
-units:["DIAS","HORAS","MINUTOS","SEGUNDOS","CENTÉSIMOS"]
-},
+    slider.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse" && event.button !== 0) return;
 
-{
-lang:"tr",
-flag:"🇹🇷",
-title:"Sistem Geçici Olarak Kapalı",
-description:"Sistem, yazılımsal bir sorun nedeniyle geçici olarak hizmet dışıdır. Sorunun giderilmesi için çalışmalar devam etmektedir.",
-status:"Sistem bakımda",
-units:["GÜN","SAAT","DAKİKA","SANİYE","SALİSE"]
-}
+        activePointer = event.pointerId;
 
-];
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
 
+        isHorizontalSwipe = false;
 
-/* DİL ELEMANLARI */
+        pauseWhileHolding();
 
-const flagElement = document.getElementById("flag");
-const headingElement = document.getElementById("heading");
-const descriptionElement = document.getElementById("description");
-const statusElement = document.getElementById("statusText");
-
-const unitElements = [
-    document.getElementById("dayUnit"),
-    document.getElementById("hourUnit"),
-    document.getElementById("minuteUnit"),
-    document.getElementById("secondUnit"),
-    document.getElementById("millisecondUnit")
-];
-
-let languageIndex = 0;
-
-
-/* METİNLERİ ALANA SIĞDIR */
-
-function fitText(element, maxSize, minSize, maxLength) {
-    const length = Array.from(element.textContent).length;
-    const ratio = Math.min(1, maxLength / length);
-    const size = Math.max(minSize, maxSize * ratio);
-    element.style.fontSize = size + "px";
-}
-
-
-/* DİLİ DEĞİŞTİR */
-
-function showLanguage(index) {
-    const item = languages[index];
-
-    document.documentElement.lang = item.lang;
-    document.documentElement.dir = "ltr";
-
-    flagElement.textContent = item.flag;
-    headingElement.textContent = item.title;
-    descriptionElement.textContent = item.description;
-    statusElement.textContent = item.status;
-
-    item.units.forEach((unit, i) => {
-        unitElements[i].textContent = unit;
+        try {
+            slider.setPointerCapture(event.pointerId);
+        } catch (_) {}
     });
 
-    fitText(headingElement, 34, 20, 27);
-    fitText(descriptionElement, 15, 11, 145);
-}
+    slider.addEventListener("pointermove", (event) => {
+        if (activePointer !== event.pointerId) return;
 
+        const dx = event.clientX - pointerStartX;
+        const dy = event.clientY - pointerStartY;
 
-/* OTOMATİK DİL GEÇİŞİ: 8 SANİYE */
+        if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+            isHorizontalSwipe = true;
+        }
+    });
 
-function nextLanguage() {
-    if (languageIndex >= languages.length - 1) {
-        showLanguage(languages.length - 1);
-        return;
-    }
+    function finishPointer(event) {
+        if (activePointer !== event.pointerId) return;
 
-    languageIndex++;
-    showLanguage(languageIndex);
+        const dx = event.clientX - pointerStartX;
 
-    setTimeout(nextLanguage, 8000);
-}
-
-showLanguage(0);
-setTimeout(nextLanguage, 8000);
-
-
-/* ORTAK SABİT BİTİŞ ZAMANI
-   21 Kasım 2026, 14:09:12.760 Türkiye saati
-   UTC karşılığı: 11:09:12.760Z */
-
-const END_TIME = Date.parse("2026-11-21T11:09:12.760Z");
-
-/* SUNUCU SAATİ */
-
-let serverTimeOffset = 0;
-let serverTimeSynced = false;
-let syncInProgress = false;
-
-async function syncServerTime() {
-
-    if (syncInProgress) return;
-
-    syncInProgress = true;
-
-    try {
-
-        const start = Date.now();
-
-        let response = await fetch(window.location.href, {
-            method: "HEAD",
-            cache: "no-store"
-        });
-
-        if (!response.ok || !response.headers.get("Date")) {
-            response = await fetch(window.location.href, {
-                method: "GET",
-                cache: "no-store"
-            });
+        if (isHorizontalSwipe && Math.abs(dx) >= SWIPE_THRESHOLD) {
+            showSlide(current + (dx < 0 ? 1 : -1));
         }
 
-        const serverDate = response.headers.get("Date");
+        activePointer = null;
+        isHorizontalSwipe = false;
 
-        if (serverDate) {
-            const serverTime = new Date(serverDate).getTime();
-            const end = Date.now();
+        resumeAfterHolding();
+    }
 
-            if (Number.isFinite(serverTime)) {
-                serverTimeOffset = serverTime - ((start + end) / 2);
-                serverTimeSynced = true;
-            }
+    slider.addEventListener("pointerup", finishPointer);
+    slider.addEventListener("pointercancel", finishPointer);
+
+    slider.addEventListener("lostpointercapture", () => {
+        activePointer = null;
+        isHorizontalSwipe = false;
+
+        resumeAfterHolding();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            stopTimer();
+        } else if (!isHolding) {
+            startTimer();
         }
+    });
 
-    } catch (error) {
-        console.warn("Sunucu saati senkronizasyonu başarısız:", error);
-    } finally {
-        syncInProgress = false;
-    }
-}
-
-
-/* GERİ SAYIM ELEMANLARI */
-
-const dayElement = document.getElementById("days");
-const hourElement = document.getElementById("hours");
-const minuteElement = document.getElementById("minutes");
-const secondElement = document.getElementById("seconds");
-const millisecondElement = document.getElementById("milliseconds");
-
-
-/* RAKAM ANİMASYONU */
-
-function updateNumber(element, value, animate = true) {
-
-    const formatted = String(value).padStart(2, "0");
-
-    if (element.textContent === formatted) return;
-
-    element.textContent = formatted;
-
-    if (animate) {
-        element.classList.remove("animate");
-        void element.offsetWidth;
-        element.classList.add("animate");
-    }
-}
-
-
-/* TÜM CİHAZLAR İÇİN ORTAK GERİ SAYIM */
-
-function updateCountdown() {
-
-    const currentTime = Date.now() + serverTimeOffset;
-    const remaining = Math.max(0, END_TIME - currentTime);
-
-    if (remaining <= 0) {
-
-        dayElement.textContent = "00";
-        hourElement.textContent = "00";
-        minuteElement.textContent = "00";
-        secondElement.textContent = "00";
-        millisecondElement.textContent = "00";
-
-        return;
-    }
-
-    const days = Math.floor(remaining / 86400000);
-    const hours = Math.floor((remaining % 86400000) / 3600000);
-    const minutes = Math.floor((remaining % 3600000) / 60000);
-    const seconds = Math.floor((remaining % 60000) / 1000);
-    const milliseconds = Math.floor((remaining % 1000) / 10);
-
-    updateNumber(dayElement, days);
-    updateNumber(hourElement, hours);
-    updateNumber(minuteElement, minutes);
-    updateNumber(secondElement, seconds);
-    updateNumber(millisecondElement, milliseconds, false);
-
-    setTimeout(updateCountdown, 10);
-}
-
-
-/* BAŞLAT */
-
-syncServerTime().finally(() => {
-    updateCountdown();
-});
-
-/* HER 30 SANİYEDE SUNUCU SAATİNİ YENİLE */
-
-setInterval(syncServerTime, 30000);
-
+    startTimer();
+})();
 </script>
 
 </body>
